@@ -54,7 +54,7 @@ def k_means(data: pd.DataFrame, count_clusters: int, lebels: list) -> pd.DataFra
         np.zeros(data.shape[0], dtype=int), columns=['cluster'])], axis=1)
 
     end: bool = False
-    data = pd.DataFrame(data, columns=('Широта', 'Долгота'))
+    data = pd.DataFrame(data, columns=('Широта', 'Долгота', 'Цена_м^2'))
 
     # Вычисляю начальные значения
     indexes = get_random_index(data.shape[0], count_clusters)
@@ -75,5 +75,9 @@ def k_means(data: pd.DataFrame, count_clusters: int, lebels: list) -> pd.DataFra
 
         end = np.array_equal(data.cluster, old_clusters)
         centers = get_centers(data)
+
+    # Конвертирую столбец cluster str -> int и сортирую по возрастанию
+    data['cluster'] = pd.to_numeric(data['cluster'])
+    data.sort_values(by='cluster')
 
     return data
